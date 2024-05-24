@@ -9,16 +9,20 @@ export const ToDoList = () => {
   const todoList = useSelector((state) => state.todo.todoList);
   const sortCriteria = useSelector((state) => state.todo.sortCriteria);
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);   // for displaying input 
   const [currentTodo, setCurrentTodo] = useState(null);
   const [newTask, setNewTask] = useState('');
 
+
+  // This useEffect Saves the updated todoList to local storage whenever there are changes to the todoList.
   useEffect(() => {
     if (todoList.length > 0) {
       localStorage.setItem('todolist', JSON.stringify(todoList));
     }
   }, [todoList]);
 
+
+  // This useEffect Loads the todoList from local storage into the Redux state when the component mounts.
   useEffect(() => {
     const localTodoList = JSON.parse(localStorage.getItem('todolist'));
     if (localTodoList) {
@@ -26,6 +30,8 @@ export const ToDoList = () => {
     }
   }, [dispatch]);
 
+
+ // Handling Sorting of the task
   const handleSort = (sortCriteria) => {
     dispatch(sortTodo(sortCriteria));
   };
@@ -36,7 +42,9 @@ export const ToDoList = () => {
     if (sortCriteria === 'Not Completed' && !todo.completed) return true;
     return false;
   });
+  
 
+  // Handling Add function
   const handleAddToDo = (task) => {
     if (task.trim().length === 0) {
       alert('Please enter a task');
@@ -50,12 +58,15 @@ export const ToDoList = () => {
     }
   };
 
+
+  // Handling Delete function
   const handleDeleteToDo = (id) => {
     const updateToDoList = todoList.filter((todo) => todo.id !== id);
     dispatch(setTodoList(updateToDoList));
     localStorage.setItem('todolist', JSON.stringify(updateToDoList));
   };
 
+    // Handling Update function
   const handleUpdateTodoList = (id, task) => {
     if (task.trim().length === 0) {
       alert('Please enter a task');
@@ -68,13 +79,15 @@ export const ToDoList = () => {
     }
   };
 
+    // Handling Toggle function
   const handleToggleCompleted = (id) => {
     dispatch(toggleCompleted({ id }));
   };
 
   return (
     <div>
-      {showModal && (
+      {
+      showModal && (
         <div className="w-full fixed bg-[rgba(0,0,0,0.5)] left-0 top-0 h-full flex items-center justify-center">
           <div className="bg-white p-8 rounded-md">
             <input
@@ -91,11 +104,14 @@ export const ToDoList = () => {
               {currentTodo ? (
                 <>
                   <button
+                  lassName="text-white bg-orange-500 rounded-md py-3 px-10"
                     onClick={() => handleUpdateTodoList(currentTodo.id, newTask)}
                   >
                     Save
                   </button>
-                  <button onClick={() => setShowModal(false)}>Cancel</button>
+                  <button
+                  className="text-white bg-slate-700 rounded-md py-3 mr-4 px-10"
+                   onClick={() => setShowModal(false)}>Cancel</button>
                 </>
               ) : (
                 <>
@@ -116,7 +132,8 @@ export const ToDoList = () => {
             </div>
           </div>
         </div>
-      )}
+      )
+      }
 
       <div className="flex items-center justify-center flex-col">
         {todoList.length === 0 ? (

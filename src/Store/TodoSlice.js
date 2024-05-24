@@ -9,9 +9,11 @@ export const ToDoSlice = createSlice({
     name : "todo",
     initialState,
     reducers : {
+
       setTodoList : (state,action)=>{
         state.todoList = action.payload;
       },
+
       addTodo : (state, action) => {
         state.todoList.push({
             task: action.payload.task,
@@ -19,14 +21,17 @@ export const ToDoSlice = createSlice({
             completed: false
         })
       },
+
       sortTodo: (state,action) => {
         state.sortCriteria = action.payload;
       },
+
       updateTodo : (state, action) =>{
            const {id, task} = action.payload;
            const index = state.todoList.findIndex(todo => todo.id === id);
            state.todoList[index].task = task; 
       },
+      
       toggleCompleted: (state,action)=>{
            const {id} = action.payload;
            const index = state.todoList.findIndex(todo => todo.id === id);
